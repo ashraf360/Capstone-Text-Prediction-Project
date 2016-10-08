@@ -1,0 +1,59 @@
+
+A Shiny App for Word Prediction - Coursera Capstone Project
+========================================================
+author: Ashraf Youssef  
+date: October 5, 2016
+autosize: true
+
+The Application
+========================================================
+
+A Shiny application which predicts the next word based on a series of words submitted by the user
+
+ - The Shiny app is located at the following link:
+https://ashraf.shinyapps.io/TextPrediction/
+
+ - The user types the input in a text box and presses the "Submit" button 
+ - The response is displayed on the right side of the application screen
+
+The Algorithm
+========================================================
+- The algorithm is based on Katz's Backoff Model which can be summarized by the following equation:
+
+  $$
+  \small
+ P_{bo}(w_{i}\vert w_{i-n+1} \ldots w_{i-1})
+  =\left\{\begin{matrix}
+d_{w_{i-n+1} \ldots w_{i-1}}\frac{C({w_{i-n+1} \ldots w_{i-1}w_{i}})}{C({w_{i-n+1} \ldots w_{i-1}})}  & \text{     if   } C({w_{i-n+1} \ldots w_{i}})>k 
+\\ 
+\alpha_{w_{i-n+1} \ldots w_{i-1}}P_{bo}(w_{i}\vert w_{i-n+2} \ldots w_{i-1})&  \text {  otherwise}
+\end{matrix}\right.
+  $$
+ - $C(x) =$ number of times $x$ appears, $w_{i} =$ $\it{i}$ th word in the given context, and $\alpha$ is empirically recommended in the literature as 0.4
+ - $k = 0$ and $d = 1$ for our implementation 
+ - Input string was cleansed by removing extraneous spaces and punctuation
+ - The Maximum Likelihood Estimate (MLE) was calculated for all N-grams (5,4,...,2), and the result with the highest MLE is displayed 
+
+
+
+Performance and Results
+========================================================
+
+ - A key design considering was speed of the application as well as memory footprint
+ - During the initial calculation of the N-grams, a 10% sample of the Corpus was taken
+ - To reduce the size of the N-gram dataframes,the N-grams with frequency <3 were pruned
+ - Using the Benchmark.R tool, the application showed a Top-1 precision of 12.1% 
+
+Next Steps
+========================================================
+Even though the benchmarked results are reasonable at 12.1% there are many other ideas that can be explored
+ - Kneser-Ney smoothing algorithm
+ 
+         The idea behind this method is to utilize a clever combination of the higher order and lower order N-grams
+ - Skip Gram Modeling
+ 
+        generalization of n-grams in which the components need not be consecutive in the text under consideration
+ - Looking at the impact of modifying the sample size of the Corpus that is being considered
+         
+         For this application, a Corpus sample of 10% was used, but we could vary sample size
+
